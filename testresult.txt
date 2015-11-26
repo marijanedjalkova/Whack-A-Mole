@@ -1,0 +1,461 @@
+RBF is Gaussian train enum is RESILIENTPROPAGATION KOHONEN
+Training Gaussian RESILIENTPROPAGATION true
+Epoch #90 Error:0.0102778241845458
+RBF method: Gaussian
+Train method: RESILIENTPROPAGATION
+Kohonen: true
+Train time: 18744
+One round time: 187
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 53
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is RESILIENTPROPAGATION ANALOG
+Training Gaussian RESILIENTPROPAGATION false
+Epoch #90 Error:0.08032989197776175
+RBF method: Gaussian
+Train method: RESILIENTPROPAGATION
+Kohonen: false
+Train time: 3493
+One round time: 34
+Correct count: 86
+Acceptable Count: 91
+Wrap Error: 6
+Correct state count: 55
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is BACKPROPAGATION KOHONEN
+Training Gaussian BACKPROPAGATION true
+Epoch #90 Error:0.012639479432691513
+RBF method: Gaussian
+Train method: BACKPROPAGATION
+Kohonen: true
+Train time: 22106
+One round time: 221
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 53
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is BACKPROPAGATION ANALOG
+Training Gaussian BACKPROPAGATION false
+Epoch #90 Error:0.0911165509358551
+RBF method: Gaussian
+Train method: BACKPROPAGATION
+Kohonen: false
+Train time: 3514
+One round time: 35
+Correct count: 1
+Acceptable Count: 6
+Wrap Error: 4
+Correct state count: 48
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is QUICKPROPAGATION KOHONEN
+Training Gaussian QUICKPROPAGATION true
+Epoch #90 Error:0.01014897307031429
+RBF method: Gaussian
+Train method: QUICKPROPAGATION
+Kohonen: true
+Train time: 22101
+One round time: 221
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 43
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is QUICKPROPAGATION ANALOG
+Training Gaussian QUICKPROPAGATION false
+Epoch #90 Error:0.08028005728749157
+RBF method: Gaussian
+Train method: QUICKPROPAGATION
+Kohonen: false
+Train time: 3517
+One round time: 35
+Correct count: 77
+Acceptable Count: 86
+Wrap Error: 4
+Correct state count: 45
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is SCALEDCONJUGATEGRADIENT KOHONEN
+Training Gaussian SCALEDCONJUGATEGRADIENT true
+Epoch #90 Error:0.009749685936680472
+RBF method: Gaussian
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: true
+Train time: 42228
+One round time: 422
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 58
+----------------------------------------------------------------------------
+RBF is Gaussian train enum is SCALEDCONJUGATEGRADIENT ANALOG
+Training Gaussian SCALEDCONJUGATEGRADIENT false
+Epoch #90 Error:0.07989627731038719
+RBF method: Gaussian
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: false
+Train time: 7010
+One round time: 70
+Correct count: 90
+Acceptable Count: 91
+Wrap Error: 3
+Correct state count: 51
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is RESILIENTPROPAGATION KOHONEN
+Training Multiquadric RESILIENTPROPAGATION true
+Epoch #90 Error:0.014448577541203166
+RBF method: Multiquadric
+Train method: RESILIENTPROPAGATION
+Kohonen: true
+Train time: 12051
+One round time: 120
+Correct count: 8
+Acceptable Count: 15
+Wrap Error: 5
+Correct state count: 57
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is RESILIENTPROPAGATION ANALOG
+Training Multiquadric RESILIENTPROPAGATION false
+Epoch #90 Error:0.09808846183130339
+RBF method: Multiquadric
+Train method: RESILIENTPROPAGATION
+Kohonen: false
+Train time: 385
+One round time: 3
+Correct count: 5
+Acceptable Count: 19
+Wrap Error: 6
+Correct state count: 49
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is BACKPROPAGATION KOHONEN
+Training Multiquadric BACKPROPAGATION true
+Epoch #90 Error:Infinity
+RBF method: Multiquadric
+Train method: BACKPROPAGATION
+Kohonen: true
+Train time: 11889
+One round time: 118
+Correct count: 0
+Acceptable Count: 0
+Wrap Error: 8
+Correct state count: 57
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is BACKPROPAGATION ANALOG
+Training Multiquadric BACKPROPAGATION false
+Epoch #90 Error:Infinity
+RBF method: Multiquadric
+Train method: BACKPROPAGATION
+Kohonen: false
+Train time: 384
+One round time: 3
+Correct count: 0
+Acceptable Count: 0
+Wrap Error: 3
+Correct state count: 0
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is QUICKPROPAGATION KOHONEN
+Training Multiquadric QUICKPROPAGATION true
+Epoch #90 Error:1.476070076724655E14
+RBF method: Multiquadric
+Train method: QUICKPROPAGATION
+Kohonen: true
+Train time: 11787
+One round time: 117
+Correct count: 0
+Acceptable Count: 1
+Wrap Error: 7
+Correct state count: 52
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is QUICKPROPAGATION ANALOG
+Training Multiquadric QUICKPROPAGATION false
+Epoch #90 Error:4.4903322226043992E16
+RBF method: Multiquadric
+Train method: QUICKPROPAGATION
+Kohonen: false
+Train time: 381
+One round time: 3
+Correct count: 0
+Acceptable Count: 0
+Wrap Error: 10
+Correct state count: 0
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is SCALEDCONJUGATEGRADIENT KOHONEN
+Training Multiquadric SCALEDCONJUGATEGRADIENT true
+Epoch #90 Error:0.013759003417215327
+RBF method: Multiquadric
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: true
+Train time: 24501
+One round time: 245
+Correct count: 71
+Acceptable Count: 90
+Wrap Error: 7
+Correct state count: 58
+----------------------------------------------------------------------------
+RBF is Multiquadric train enum is SCALEDCONJUGATEGRADIENT ANALOG
+Training Multiquadric SCALEDCONJUGATEGRADIENT false
+Epoch #90 Error:0.08654552895816847
+RBF method: Multiquadric
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: false
+Train time: 749
+One round time: 7
+Correct count: 7
+Acceptable Count: 18
+Wrap Error: 12
+Correct state count: 47
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is RESILIENTPROPAGATION KOHONEN
+Training InverseMultiquadric RESILIENTPROPAGATION true
+Epoch #90 Error:0.01227506396956248
+RBF method: InverseMultiquadric
+Train method: RESILIENTPROPAGATION
+Kohonen: true
+Train time: 11988
+One round time: 119
+Correct count: 65
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 54
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is RESILIENTPROPAGATION ANALOG
+Training InverseMultiquadric RESILIENTPROPAGATION false
+Epoch #90 Error:0.08186894126586598
+RBF method: InverseMultiquadric
+Train method: RESILIENTPROPAGATION
+Kohonen: false
+Train time: 525
+One round time: 5
+Correct count: 28
+Acceptable Count: 72
+Wrap Error: 5
+Correct state count: 41
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is BACKPROPAGATION KOHONEN
+Training InverseMultiquadric BACKPROPAGATION true
+Epoch #90 Error:Infinity
+RBF method: InverseMultiquadric
+Train method: BACKPROPAGATION
+Kohonen: true
+Train time: 10915
+One round time: 109
+Correct count: 0
+Acceptable Count: 1
+Wrap Error: 12
+Correct state count: 46
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is BACKPROPAGATION ANALOG
+Training InverseMultiquadric BACKPROPAGATION false
+Epoch #90 Error:Infinity
+RBF method: InverseMultiquadric
+Train method: BACKPROPAGATION
+Kohonen: false
+Train time: 472
+One round time: 4
+Correct count: 0
+Acceptable Count: 0
+Wrap Error: 6
+Correct state count: 46
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is QUICKPROPAGATION KOHONEN
+Training InverseMultiquadric QUICKPROPAGATION true
+Epoch #90 Error:5.569561498513671E117
+RBF method: InverseMultiquadric
+Train method: QUICKPROPAGATION
+Kohonen: true
+Train time: 12037
+One round time: 120
+Correct count: 0
+Acceptable Count: 1
+Wrap Error: 8
+Correct state count: 50
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is QUICKPROPAGATION ANALOG
+Training InverseMultiquadric QUICKPROPAGATION false
+Epoch #90 Error:4.3591354441040375E119
+RBF method: InverseMultiquadric
+Train method: QUICKPROPAGATION
+Kohonen: false
+Train time: 521
+One round time: 5
+Correct count: 0
+Acceptable Count: 2
+Wrap Error: 6
+Correct state count: 52
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is SCALEDCONJUGATEGRADIENT KOHONEN
+Training InverseMultiquadric SCALEDCONJUGATEGRADIENT true
+Epoch #90 Error:0.01052734577628803
+RBF method: InverseMultiquadric
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: true
+Train time: 24250
+One round time: 242
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 49
+----------------------------------------------------------------------------
+RBF is InverseMultiquadric train enum is SCALEDCONJUGATEGRADIENT ANALOG
+Training InverseMultiquadric SCALEDCONJUGATEGRADIENT false
+Epoch #90 Error:0.08073451448729244
+RBF method: InverseMultiquadric
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: false
+Train time: 1020
+One round time: 10
+Correct count: 34
+Acceptable Count: 72
+Wrap Error: 5
+Correct state count: 39
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is RESILIENTPROPAGATION KOHONEN
+Training MexicanHat RESILIENTPROPAGATION true
+Epoch #90 Error:0.01838215485265609
+RBF method: MexicanHat
+Train method: RESILIENTPROPAGATION
+Kohonen: true
+Train time: 17285
+One round time: 172
+Correct count: 11
+Acceptable Count: 32
+Wrap Error: 4
+Correct state count: 51
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is RESILIENTPROPAGATION ANALOG
+Training MexicanHat RESILIENTPROPAGATION false
+Epoch #90 Error:0.3442413294670586
+RBF method: MexicanHat
+Train method: RESILIENTPROPAGATION
+Kohonen: false
+Train time: 5874
+One round time: 58
+Correct count: 6
+Acceptable Count: 7
+Wrap Error: 7
+Correct state count: 43
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is BACKPROPAGATION KOHONEN
+Training MexicanHat BACKPROPAGATION true
+Epoch #90 Error:0.019607736970284218
+RBF method: MexicanHat
+Train method: BACKPROPAGATION
+Kohonen: true
+Train time: 17064
+One round time: 170
+Correct count: 31
+Acceptable Count: 76
+Wrap Error: 2
+Correct state count: 51
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is BACKPROPAGATION ANALOG
+Training MexicanHat BACKPROPAGATION false
+Epoch #90 Error:0.3691724494516637
+RBF method: MexicanHat
+Train method: BACKPROPAGATION
+Kohonen: false
+Train time: 5886
+One round time: 58
+Correct count: 0
+Acceptable Count: 1
+Wrap Error: 13
+Correct state count: 42
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is QUICKPROPAGATION KOHONEN
+Training MexicanHat QUICKPROPAGATION true
+Epoch #90 Error:0.019122317167588512
+RBF method: MexicanHat
+Train method: QUICKPROPAGATION
+Kohonen: true
+Train time: 17625
+One round time: 176
+Correct count: 26
+Acceptable Count: 66
+Wrap Error: 9
+Correct state count: 53
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is QUICKPROPAGATION ANALOG
+Training MexicanHat QUICKPROPAGATION false
+Epoch #90 Error:0.35824519296708524
+RBF method: MexicanHat
+Train method: QUICKPROPAGATION
+Kohonen: false
+Train time: 5879
+One round time: 58
+Correct count: 0
+Acceptable Count: 0
+Wrap Error: 8
+Correct state count: 49
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is SCALEDCONJUGATEGRADIENT KOHONEN
+Training MexicanHat SCALEDCONJUGATEGRADIENT true
+Epoch #90 Error:0.018373536624484987
+RBF method: MexicanHat
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: true
+Train time: 35178
+One round time: 351
+Correct count: 25
+Acceptable Count: 72
+Wrap Error: 4
+Correct state count: 50
+----------------------------------------------------------------------------
+RBF is MexicanHat train enum is SCALEDCONJUGATEGRADIENT ANALOG
+Training MexicanHat SCALEDCONJUGATEGRADIENT false
+Epoch #90 Error:0.35003612041496046
+RBF method: MexicanHat
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: false
+Train time: 11589
+One round time: 115
+Correct count: 2
+Acceptable Count: 2
+Wrap Error: 10
+Correct state count: 43
+----------------------------------------------------------------------------
+Number of results: 32
+FASTEST IN TRAINING
+RBF method: Multiquadric
+Train method: QUICKPROPAGATION
+Kohonen: false
+Train time: 381
+One round time: 3
+Correct count: 0
+Acceptable Count: 0
+Wrap Error: 10
+Correct state count: 0
+----------------------------------------------------------------------------
+BEST
+RBF method: Gaussian
+Train method: RESILIENTPROPAGATION
+Kohonen: true
+Train time: 18744
+One round time: 187
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 53
+----------------------------------------------------------------------------
+FASTEST IN ONE ROUND
+RBF method: Multiquadric
+Train method: RESILIENTPROPAGATION
+Kohonen: false
+Train time: 385
+One round time: 3
+Correct count: 5
+Acceptable Count: 19
+Wrap Error: 6
+Correct state count: 49
+----------------------------------------------------------------------------
+BEST AT STATES
+RBF method: Gaussian
+Train method: SCALEDCONJUGATEGRADIENT
+Kohonen: true
+Train time: 42228
+One round time: 422
+Correct count: 100
+Acceptable Count: 100
+Wrap Error: 0
+Correct state count: 58
+----------------------------------------------------------------------------
