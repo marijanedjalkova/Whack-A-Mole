@@ -1,31 +1,28 @@
-
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Random;
 import org.encog.Encog;
 import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.ml.train.MLTrain;
+import org.encog.neural.freeform.training.FreeformResilientPropagation;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.neural.pattern.RadialBasisPattern;
 import org.encog.neural.rbf.RBFNetwork;
 import org.encog.neural.rbf.training.SVDTraining;
 
 public class Machine {
-
     public static double[][] INPUT;
     public static double[][] IDEAL;
+    public static RBFNetwork network;
     
-   public Machine() throws IOException{
+    public Machine() throws IOException{
         //Specify the number of dimensions and the number of neurons per dimension
         int dimensions = 2;
-        int numNeuronsPerDimension = 7;
+        int numNeuronsPerDimension = 50;
         //Set the standard RBF neuron width. 
         //Literature seems to suggest this is a good default value.
-        double volumeNeuronWidth = 2.0 / numNeuronsPerDimension;
+        double volumeNeuronWidth = 0.9 / numNeuronsPerDimension;
         //RBF can struggle when it comes to flats at the edge of the sample space.
         //We have added the ability to include wider neurons on the sample space boundary which greatly
         //improves fitting to flats
@@ -39,235 +36,65 @@ public class Machine {
         int numNeurons = (int)Math.pow(numNeuronsPerDimension, dimensions);
         int numEdges = (int)(dimensions * Math.pow(2, dimensions - 1));
         pattern.addHiddenLayer(numNeurons);
-        RBFNetwork network = (RBFNetwork)pattern.generate();
+        network = (RBFNetwork)pattern.generate();
         //Position the multidimensional RBF neurons, with equal spacing, within the provided sample space from 0 to 1.
-        network.setRBFCentersAndWidthsEqualSpacing(0, 1, RBFEnum.Gaussian , volumeNeuronWidth, includeEdgeRBFs);
+        network.setRBFCentersAndWidthsEqualSpacing(0, 1, RBFEnum.Gaussian, volumeNeuronWidth, includeEdgeRBFs);
+
         //Create some training data that can not easily be represented by gaussians
         //There are other training examples for both 1D and 2D
         //Degenerate training data only provides outputs as 1 or 0 (averaging over all outputs for a given set of inputs would produce something approaching the smooth training data).
         //Smooth training data provides true values for the provided input dimensions.
-        
         create2DSmoothTainingDataGit();
         //Create the training set and train.
         MLDataSet trainingSet = new BasicMLDataSet(INPUT, IDEAL);
         MLTrain train = new SVDTraining(network, trainingSet);
         //SVD is a single step solve
         int epoch = 1;
-        do{
+        do
+        {
             train.iteration();
-            System.out.println("Epoch #" + epoch + " Error:" + train.getError());
+            if (epoch % 1000 == 0)
+            	System.out.println("Epoch #" + epoch + " Error:" + train.getError());
             epoch++;
-        } while ((epoch < 100) && (train.getError() > 0.001));
-        // test the neural network
-        System.out.println("Neural Network Results:");
-        //Create a testing array which may be to a higher resolution than the original training data
-        set2DTestingArrays(100);
-        trainingSet = new BasicMLDataSet(INPUT, IDEAL);
+        } while ((epoch < 2) && (train.getError() > 0.000001));
+    }
 
-        FileWriter outFile = new FileWriter("results.csv");
-        PrintWriter out = new PrintWriter(outFile);
-        
-        
-            for (MLDataPair pair : trainingSet){
+    
+    public static int makeDecision(int clue, int stateValue){
+ 	   double[] inputArray = {scale(clue), scaleState(stateValue)};
+ 	   System.out.println(" input is " + scale(clue) + " and " + scaleState(stateValue));
+ 	   double[][] iArray = new double[1][2];
+ 	   iArray[0] = inputArray;
+ 	   BasicMLDataSet input_set = new BasicMLDataSet(iArray, null);
+ 	   MLData output = network.compute(input_set.get(0).getInput());
+ 	   System.out.println(" output data will be " + output.getData(0));
+ 	   return inverseScale(output.getData(0));
+    }
+    
+    public static void shutDown(){
+ 	   Encog.getInstance().shutdown();
+    }
+     
+    private static int calculate(int clue, int stateValue){
+    	int result = 0;
+ 	  if (stateValue == 0){
+ 		  result = clue + 5;
+ 		  if (result > 100){
+ 			  result = result - 100;
+ 		  }
+ 	  } else {
+ 		   result = clue - 5;
+ 		   if (result < 0){
+ 			   result = 100 + result;
+ 		   }
+ 	   }
+ 	  return result;
+    }
 
-                MLData output = network.compute(pair.getInput());
-                //1D//sw.WriteLine(InverseScale(pair.Input[0]) + ", " + Chop(InverseScale(output[0])));// + ", " + pair.Ideal[0]);
-                out.println(inverseScale(pair.getInputArray()[0]) + ", " + inverseScale(pair.getInputArray()[1]) + ", " + chop(inverseScale(output.getData(0)))+ ",ideal=" + pair.getIdeal().getData()[0]);// + ", " + pair.Ideal[0]);// + ",ideal=" + pair.Ideal[0]);
-                //3D//sw.WriteLine(InverseScale(pair.Input[0]) + ", " + InverseScale(pair.Input[1]) + ", " + InverseScale(pair.Input[2]) + ", " + Chop(InverseScale(output[0])));// + ", " + pair.Ideal[0]);// + ",ideal=" + pair.Ideal[0]);
-                //Console.WriteLine(pair.Input[0] + ", actual=" + output[0] + ",ideal=" + pair.Ideal[0]);
-            }
-            out.close();
-        System.out.println("\nFit output saved to results.csv");
-        
-        Encog.getInstance().shutdown();
-    }
-    
-    static double scale(double x){
-        return (x * 0.7) + 0.15;
-    }
-    
-    static double inverseScale(double x){
-        return (x - 0.15) / 0.7;
-    }
-    
-    static double chop(double x){
-        if (x > 0.99)
-            return 0.99;
-        else if (x < 0)
-            return 0;
-        else
-            return x;
-    }
-    
-    private static double[][] convertColumnsTo2DSurface(double[][] cols, int valueCol){
-        //if (cols[0].Length != 3)
-        //    throw new Exception("Incorrect number of cols detected.");
-        double sideLength = Math.sqrt(cols.length);
-        double[][] surface = new double[(int)sideLength + 1][];
-        for (int i = 0; i < surface.length; i++)
-        {
-            surface[i] = new double[surface.length];
-        }
-        for (int i = 0; i < cols.length; i++)
-        {
-            //[0] is x
-            //[1] is y
-            //Boundary bottom 
-            //int rowIndex = (int)Math.Round(((cols[i][0]) * (sideLength-1)), 6);
-            //int columnIndex = (int)Math.Round(((cols[i][1]) * (sideLength-1)), 6);
-            //Boundary middle
-            int rowIndex = (int)Math.round(((cols[i][0] - 0.05) * (sideLength)) * 6000)/6000;
-            int columnIndex = (int)Math.round(((cols[i][1] - 0.05) * (sideLength)) * 6000)/6000;
-            surface[0][rowIndex + 1] = cols[i][0];
-            surface[columnIndex + 1][0] = cols[i][1];
-            surface[columnIndex + 1][rowIndex + 1] = cols[i][valueCol];
-        }
-        //fix the 0,0 value
-        surface[0][0] = Double.NaN;
-        return surface;
-    }
-    
-    private static double[][] convert2DSurfaceToColumns(double[][] surface){
-        int totalRows = (surface.length - 1) * (surface.length - 1);
-        double[][] cols = new double[totalRows][];
-        for (int i = 1; i < surface.length; i++)
-        {
-            for (int j = 1; j < surface[i].length; j++)
-            {
-                double cellWidth = (1.0 / (2.0 * (double)(surface.length - 1)));
-                cols[(i - 1) * (surface.length - 1) + (j - 1)] = new double[3];
-                //For midpoints
-                cols[(i - 1) * (surface.length - 1) + (j - 1)][0] = ((double)(i - 1) / (double)(surface.length - 1)) + cellWidth;
-                cols[(i - 1) * (surface.length - 1) + (j - 1)][1] = ((double)(j - 1) / (double)(surface.length - 1)) + cellWidth;
-                //For actual value
-                //cols[(i - 1) * (surface.Length - 1) + (j - 1)][0] = ((double)(i - 1) / (double)(surface.Length - 1));
-                //cols[(i - 1) * (surface.Length - 1) + (j - 1)][1] = ((double)(j - 1) / (double)(surface.Length - 1));
-                cols[(i - 1) * (surface.length - 1) + (j - 1)][2] = surface[j][i];
-            }
-        }
-        return cols;
-    }
-    
-    private static void set1DTestingArrays(int sideLength) {
-        int iLimit = sideLength;
-        INPUT = new double[(iLimit + 1)][1];
-        IDEAL = new double[(iLimit + 1)][1];
-        for (int i = 0; i <= iLimit; i++)
-        {
-            INPUT[i] = new double[1];
-            IDEAL[i] = new double[1];
-            double x = (double)i / (double)iLimit;
-            INPUT[i][0] = scale(((double)i / ((double)iLimit)));
-            IDEAL[i][0] = 0;
-        }
-    }
-    
-    private static void set2DTestingArrays(int sideLength){
-        int iLimit = sideLength;
-        int kLimit = sideLength;
-        INPUT = new double[(iLimit + 1) * (kLimit + 1)][];
-        IDEAL = new double[(iLimit + 1) * (kLimit + 1)][];
-        for (int i = 0; i <= iLimit; i++)
-        {
-            for (int k = 0; k <= kLimit; k++)
-            {
-                INPUT[i * (kLimit + 1) + k] = new double[2];
-                IDEAL[i * (kLimit + 1) + k] = new double[1];
-                double x = (double)i / (double)iLimit;
-                double y = (double)k / (double)kLimit;
-                INPUT[i * (kLimit + 1) + k][0] = scale(((double)i / ((double)iLimit)));
-                INPUT[i * (kLimit + 1) + k][1] = scale(((double)k / ((double)kLimit)));
-                IDEAL[i * (kLimit + 1) + k][0] = 0;
-               // double expression = ((x + 1.0 / 3.0) * (2 + Math.log10((y / (x + 0.1)) + 0.1))) / 3;
-               // IDEAL[i * (kLimit + 1) + k][0] = scale(expression);
-            }
-        }
-    }
-    
-    private static void set3DTestingArrays(int sideLength){
-        int iLimit = sideLength;
-        int kLimit = sideLength;
-        int jLimit = sideLength;
-        INPUT = new double[(iLimit + 1) * (kLimit + 1) * (jLimit + 1)][];
-        IDEAL = new double[(iLimit + 1) * (kLimit + 1) * (jLimit + 1)][];
-        for (int i = 0; i <= iLimit; i++)
-        {
-            for (int k = 0; k <= kLimit; k++)
-            {
-                for (int j = 0; j <= jLimit; j++)
-                {
-                    int index = (i * (kLimit + 1) * (jLimit + 1)) + (j * (kLimit + 1)) + k;
-                    INPUT[index] = new double[3];
-                    IDEAL[index] = new double[1];
-                    //double x = (double)i / (double)iLimit;
-                    //double y = (double)k / (double)kLimit;
-                    //double z = (double)j / (double)jLimit;
-                    INPUT[index][0] = scale(((double)i / ((double)iLimit)));
-                    INPUT[index][1] = scale(((double)k / ((double)kLimit)));
-                    INPUT[index][2] = scale(((double)j / ((double)jLimit)));
-                    IDEAL[index][0] = 0;
-                }
-            }
-        }
-    }
-    
-    static void create2DDegenerateTainingDataHill(){
-        Random r = new Random();
-        int iLimit = 30;
-        int kLimit = 30;
-        int jLimit = 1;
-        INPUT = new double[jLimit * iLimit * kLimit][];
-        IDEAL = new double[jLimit * iLimit * kLimit][];
-        for (int i = 0; i < iLimit; i++)
-        {
-            for (int k = 0; k < kLimit; k++)
-            {
-                for (int j = 0; j < jLimit; j++)
-                {
-                    INPUT[i * jLimit * kLimit + k * jLimit + j] = new double[2];
-                    IDEAL[i * jLimit * kLimit + k * jLimit + j] = new double[1];
-                    double x = (double)i / (double)iLimit;
-                    double y = (double)k / (double)kLimit;
-                    INPUT[i * jLimit * kLimit + k * jLimit + j][0] = ((double)i / ((double)iLimit));
-                    INPUT[i * jLimit * kLimit + k * jLimit + j][1] = ((double)k / ((double)iLimit));
-                    IDEAL[i * jLimit * kLimit + k * jLimit + j][0] = (r.nextDouble() < (Math.exp(-((x - 0.6) * (x - 0.6) + (y - 0.5) * (y - 0.5)) * 3) - 0.1)) ? 1 : 0;
-                }
-            }
-        }
-    }
-    static void create2DSmoothTainingDataHill(){
-        Random r = new Random();
-        int iLimit = 100;
-        int kLimit = 100;
-        int jLimit = 10000;
-        INPUT = new double[(iLimit + 1) * (kLimit + 1)][];
-        IDEAL = new double[(iLimit + 1) * (kLimit + 1)][];
-        for (int i = 0; i <= iLimit; i++)
-        {
-            for (int k = 0; k <= kLimit; k++)
-            {
-                INPUT[i * (kLimit + 1) + k] = new double[2];
-                IDEAL[i * (kLimit + 1) + k] = new double[1];
-                double average = 0;
-                double x = (double)i / (double)iLimit;
-                double y = (double)k / (double)kLimit;
-                double expression = (Math.exp(-((x - 0.5) * (x - 0.5) + (y - 0.6) * (y - 0.6)) * 3) - 0.1);
-                //if (r.NextDouble() < 0.4) jLimit = 5; else jLimit = 10;
-                for (int j = 0; j < jLimit; j++)
-                {
-                    average += (r.nextDouble() < expression) ? 1 : 0;
-                }
-                INPUT[i * (kLimit + 1) + k][0] = scale(((double)i / ((double)iLimit)));
-                INPUT[i * (kLimit + 1) + k][1] = scale(((double)k / ((double)kLimit)));
-                IDEAL[i * (kLimit + 1) + k][0] = scale((average / (double)jLimit));
-            }
-        }
-    }
-    
-    static void create2DSmoothTainingDataGit(){
-        Random r = new Random();
-        int iLimit = 10;
-        int kLimit = 10;
+    static void create2DSmoothTainingDataGit()
+    {
+        int iLimit = 99;
+        int kLimit = 1;
         //int jLimit = 100;
         INPUT = new double[(iLimit + 1) * (kLimit + 1)][];
         IDEAL = new double[(iLimit + 1) * (kLimit + 1)][];
@@ -277,119 +104,27 @@ public class Machine {
             {
                 INPUT[i * (kLimit + 1) + k] = new double[2];
                 IDEAL[i * (kLimit + 1) + k] = new double[1];
-                double x = (double)i / (double)iLimit;
-                double y = (double)k / (double)kLimit;
-                double expression = ((x + 1.0 / 3.0) * (2 + Math.log10((y / (x + 0.1)) + 0.1))) / 3;
-                INPUT[i * (kLimit + 1) + k][0] = scale(((double)i / ((double)iLimit)));
-                INPUT[i * (kLimit + 1) + k][1] = scale(((double)k / ((double)kLimit)));
-                IDEAL[i * (kLimit + 1) + k][0] = scale(expression);
-            }
-       
-        }
-    }
-    
-    static void create2DDegenerateTainingDataGit(){
-        Random r = new Random();
-        int iLimit = 10;
-        int kLimit = 10;
-        int jLimit = 10;
-        INPUT = new double[jLimit * iLimit * kLimit][];
-        IDEAL = new double[jLimit * iLimit * kLimit][];
-        for (int i = 0; i < iLimit; i++)
-        {
-            for (int k = 0; k < kLimit; k++)
-            {
-                double x = (double)i / (double)iLimit;
-                double y = (double)k / (double)kLimit;
-                for (int j = 0; j < jLimit; j++)
-                {
-                    INPUT[i * jLimit * kLimit + k * jLimit + j] = new double[2];
-                    IDEAL[i * jLimit * kLimit + k * jLimit + j] = new double[1];
-                    double expression = ((x + 1.0 / 3.0) * (2 + Math.log10((y / (x + 0.1)) + 0.1))) / 3; ;
-                    INPUT[i * jLimit * kLimit + k * jLimit + j][0] = ((double)i / ((double)iLimit));
-                    INPUT[i * jLimit * kLimit + k * jLimit + j][1] = ((double)k / ((double)iLimit));
-                    IDEAL[i * jLimit * kLimit + k * jLimit + j][0] = (r.nextDouble() < expression) ? 1 : 0;
-                }
+                int res = calculate(i, k);
+                INPUT[i * (kLimit + 1) + k][0] = scale(i);
+                INPUT[i * (kLimit + 1) + k][1] = scaleState(k);
+                IDEAL[i * (kLimit + 1) + k][0] = scale(res);
             }
         }
     }
     
-    static void create1DDegenerateTrainingDataLine(){
-        Random r = new Random(14768);
-        int iLimit = 10;
-        int jLimit = 100;
-        INPUT = new double[iLimit * jLimit][];
-        IDEAL = new double[iLimit * jLimit][];
-        for (int i = 0; i < iLimit; i++)
-        {
-            for (int j = 0; j < jLimit; j++)
-            {
-                INPUT[i * jLimit + j] = new double[1];
-                IDEAL[i * jLimit + j] = new double[1];
-                double x = (double)i / (double)iLimit;
-                INPUT[i * jLimit + j][0] = scale(x);
-                IDEAL[i * jLimit + j][0] = scale((r.nextDouble() < x) ? 1 : 0);
-            }
-        }
-    }
-    static void create1DSmoothTrainingDataLine(){
-        Random r = new Random(14768);
-        int iLimit = 1000;
-        int jLimit = 1;
-        INPUT = new double[iLimit][];
-        IDEAL = new double[iLimit][];
-        for (int i = 0; i < iLimit; i++)
-        {
-            INPUT[i] = new double[1];
-            IDEAL[i] = new double[1];
-            double average = 0;
-            double x = (double)i / (double)iLimit;
-            for (int j = 0; j < jLimit; j++)
-                average += (r.nextDouble() < x) ? 1 : 0;
-            INPUT[i][0] = scale(x);
-            IDEAL[i][0] = scale((double)average / (double)jLimit);
-        }
+    private static double scaleState(int value){
+    	if (value == 0)
+    		return 0.9;
+    	else
+    	return 0.1;
     }
     
-    static void create1DSmoothTrainingDataCurveSimple(){
-        Random r = new Random(14768);
-        int iLimit = 20;
-        int jLimit = 10;
-        INPUT = new double[iLimit][];
-        IDEAL = new double[iLimit][];
-        for (int i = 0; i < iLimit; i++)
-        {
-            INPUT[i] = new double[1];
-            IDEAL[i] = new double[1];
-            double average = 0;
-            double x = (double)i / (double)iLimit;
-            for (int j = 0; j < jLimit; j++)
-                average += (r.nextDouble() < (-4 * Math.pow(x, 2) + 4 * x)) ? 1 : 0;
-            INPUT[i][0] = scale(x);
-            IDEAL[i][0] = scale((double)average / (double)jLimit);
-        }
+    private static double scale(double i){
+    	return (double) i / 100;
     }
     
-    static void create1DSmoothTrainingDataCurveAdv(){
-        Random r = new Random(14768);
-        int iLimit = 100;
-        int jLimit = 100;
-        INPUT = new double[iLimit][];
-        IDEAL = new double[iLimit][];
-        for (int i = 0; i < iLimit; i++)
-        {
-            INPUT[i] = new double[1];
-            IDEAL[i] = new double[1];
-            double average = 0;
-            double x = (double)i / (double)iLimit;
-            //double y = (-7.5 * Math.Pow(x, 4)) + (21.3 * Math.Pow(x, 3)) + (-22.3 * Math.Pow(x, 2)) + (10.4 * x) - 0.8;
-            double y = ((Math.exp(2.0 * (x * 4.0 - 1)) - 1.0) / (Math.exp(2.0 * (x * 4.0 - 1)) + 1.0)) / 2 + 0.5;
-            for (int j = 0; j < jLimit; j++)
-            {
-                average += (r.nextDouble() < y) ? 1 : 0;
-            }
-            INPUT[i][0] = scale(x);
-            IDEAL[i][0] = scale((double)average / (double)jLimit);
-        }
+    public static int inverseScale(double i){
+    	return (int)Math.round(((i ) * 100));
     }
+ 
 }

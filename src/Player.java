@@ -1,11 +1,11 @@
 import java.io.IOException;
 
 public class Player {
-
+	Machine learner;
 	
 	public Player(){
 		try {
-			Machine learner = new Machine();
+			learner = new Machine();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -13,7 +13,15 @@ public class Player {
 	}
 
 	public int makeGuess(int clue, State curState) {
-		// TODO Auto-generated method stub
-		return 0;
+		// TODO maybe need some conversion?
+		int stateValue = clue;
+		if (curState != null){
+			stateValue = curState.getValue();
+		}
+		return Machine.makeDecision(clue, stateValue);
+	}
+	
+	public void finish(){
+		Machine.shutDown();
 	}
 }

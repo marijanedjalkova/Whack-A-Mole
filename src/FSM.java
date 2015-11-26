@@ -9,15 +9,16 @@ public class FSM {
 	
 	public FSM(){
 		states = new ArrayList<State>();
-		for (int i= 0; i < 5; i++)
-			states.add(new State((char) ('a' + i)));
-		currentState = states.get(0);
+		for (int i= 0; i < 2; i++)
+			states.add(new State(i));
+		currentState = null;
+	}
+
+	public void updateState(int move) {
+		currentState =  states.get(move % 2);
 	}
 	
-	public State getState(int pos){
-		currentState = states.get(pos % 5);
-		return states.get(pos % 5);
-	}
+
 	
 	
 }

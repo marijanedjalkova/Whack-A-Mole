@@ -1,13 +1,15 @@
 
 public class State {
-	char name;
+	int value;
 	
-	public State(char name){
-		this.name = name;
+	public State(int value){
+		this.value = value;
 	}
 	
-	public char getName(){
-		return name;
+	public int getValue(){
+		return value;
 	}
+	
+
 	
 }
