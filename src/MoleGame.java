@@ -8,7 +8,7 @@ public class MoleGame {
 	int correctCount;
 	int acceptableCount;
 	int correctStateCount;
-	int acceptableError = 4;
+	int acceptableError = 2;
 	int wrapError;
 	Result gameResult;
 	boolean isScripted;
@@ -39,8 +39,6 @@ public class MoleGame {
 			int pos_guess = guess[0];
 			int state_guess = guess[1];
 			model.updateState(move);
-			System.out.println(time + ". Clue: " + clue+ ", mole: " + pos_guess +"(" + move + ")" +  
-					 ", state guess " + state_guess + "(" + model.currentState.value + ")");
 			analyze_guess(pos_guess, state_guess, move, model.currentState.getValue(), clue);
 			time++;
 		}
@@ -91,6 +89,9 @@ public class MoleGame {
 			model.updateState(move);
 			analyze_guess(pos_guess, state_guess, move, model.currentState.getValue(), clue);
 			time++;
+			if (time > 30 && ((double)correctCount/time < 0.6)){
+				player.learn(50, 0.9, player.net.rbf, player.net.trainMethod, player.isKohonen);
+			}
 		}
 		
 		gameResult = new Result(correctCount, 
@@ -143,7 +144,8 @@ public class MoleGame {
 	
 	private void analyze_guess(int mole_guess, int state_guess, int mole_pos, int curStateValue, int clue){
 		//System.out.println("IN: " + clue + ", state: " + curStateValue);
-		//System.out.println("OUT mole: " + mole_guess + "(" + mole_pos + "), state: " + state_guess + "(" + curStateValue + ")");
+		System.out.println(time + ". Clue: " + clue+ ", mole: " + mole_guess +"(" + mole_pos + ")" +  
+				 ", state guess " + state_guess + "(" + model.currentState.value + ")");
 		if (state_guess == curStateValue){
 			//System.out.println("State - correct!");
 			correctStateCount++;

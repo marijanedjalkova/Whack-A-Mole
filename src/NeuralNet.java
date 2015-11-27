@@ -22,6 +22,7 @@ public class NeuralNet {
     RBFEnum rbf;
     TrainEnum trainMethod;
     
+    
     // 50, 0.9, 102, RBFEnum.Gaussian, TrainEnum.SVDTraining
     public void learn(int numNeuronsPerDimension, double vnwIndex, RBFEnum rbf, TrainEnum trainMethod, boolean isKohonen){
     	this.numNeuronsPerDimension = numNeuronsPerDimension;

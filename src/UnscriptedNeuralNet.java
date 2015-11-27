@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.Random;
-
 import org.encog.Encog;
 import org.encog.mathutil.rbf.RBFEnum;
 import org.encog.ml.data.MLData;
@@ -46,7 +45,7 @@ public class UnscriptedNeuralNet {
 	    	HashMap<Double, double[]> tests = new HashMap<Double, double[]>();
 	    	double [] weights = network.getFlat().getWeights();
 	    	double[] copy = weights.clone();
-	    	for (int i = 0; i < 1000000; i++){
+	    	for (int i = 0; i < 100; i++){
 	    		copy = weights.clone();
 	    		double[] ch = generateConfigs(weights.length);
 	    		for (int j = 0; j < weights.length; j++){
