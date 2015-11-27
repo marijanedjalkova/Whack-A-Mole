@@ -3,21 +3,35 @@ import org.encog.mathutil.rbf.RBFEnum;
 public class Player {
 	NeuralNet net;
 	boolean isKohonen;
+	UnscriptedNeuralNet unet;
+	int unscripted_threshold = 2;
+
 	
-	public Player(){
-		net = new NeuralNet();
+	public void initialiseUnscriptedNet(){
+		unet = new UnscriptedNeuralNet();
+		isKohonen = false;
 	}
+
 	
-	public void learn(
-			int numNeuronsPerDimension, 
-			double vnwIndex, 
-			RBFEnum rbf, 
-			TrainEnum trainMethod, 
-			boolean isKohonen){
-		this.isKohonen = isKohonen;
-		net.learn(numNeuronsPerDimension, vnwIndex, rbf, trainMethod, isKohonen);
+	public int[] makeUnscriptedGuess(int clue, State curState, int move, int rightStateValue){
+		int[] res = makeUGuess(clue, curState);
+		int guess = res[0];
+		int stateGuess = res[1];
+		unet.update(clue, curState.getValue(), guess, stateGuess, move, rightStateValue);
 		
+		return makeUGuess(clue, curState);
 	}
+	
+	public int[] makeUGuess(int clue, State curState){
+		int stateValue = clue;
+		if (curState != null){
+			stateValue = curState.getValue();
+		}
+		if (this.isKohonen)
+			return makeKohonenGuess(clue, stateValue);
+		return unet.makeAnalogDecision(clue, stateValue);
+	}
+
 	
 	public int[] makeGuess(int clue, State curState){
 		int stateValue = clue;
@@ -45,6 +59,21 @@ public class Player {
 			stateGuess = 1;
 		return new int[]{maxi, stateGuess};
 		
+	}
+	
+	public void learn(
+			int numNeuronsPerDimension, 
+			double vnwIndex, 
+			RBFEnum rbf, 
+			TrainEnum trainMethod, 
+			boolean isKohonen){
+		this.isKohonen = isKohonen;
+		net.learn(numNeuronsPerDimension, vnwIndex, rbf, trainMethod, isKohonen);
+		
+	}
+	
+	public void inilialiseScriptedNet(){
+		net = new NeuralNet();
 	}
 
 	

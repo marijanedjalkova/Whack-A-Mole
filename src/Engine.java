@@ -7,12 +7,14 @@ public class Engine {
 	static MoleGame g;
 
 	public static void main(String[] args) {
-		
+		g = new MoleGame(false);
+		g.player.initialiseUnscriptedNet();
+		g.startUnscriptedGame();
 	}
 	
 	public static void runTests(){
 		results = new ArrayList<Result>();
-		g = new MoleGame();
+		g = new MoleGame(true);
 		do_experiments();
 		analyze_results();
 	}
@@ -78,13 +80,14 @@ public class Engine {
 	
 	public static void play(RBFEnum rbf, TrainEnum trainMethod, boolean isKohonen){
 		long startTime = System.currentTimeMillis();
+		g.player.inilialiseScriptedNet();
 		g.player.learn(50, 0.9, rbf, trainMethod, isKohonen);
 		long stopTime = System.currentTimeMillis();
 		long trainTime = stopTime - startTime;
 	    long oneRoundTime = (trainTime) / NeuralNet.getMaxEpoch(trainMethod);
 	    g.resetGame();
 	    
-		g.startGame();
+		g.startScriptedGame();
 		Result r = g.gameResult;
 		r.setOneRoundTime(oneRoundTime);
 		r.setAllTime(trainTime);

@@ -34,6 +34,19 @@ public class Result {
 		this.train = train;
 	}
 	
+	public Result(	int correctCount,
+			int gameLength,
+			int acceptableCount,
+			int correctStateCount,
+			int wrapError,
+			int numNeuronsPerDimension){
+		this.correctCount = correctCount;
+		this.gameLength = gameLength;
+		this.acceptableCount = acceptableCount;
+		this.correctStateCount = correctStateCount;
+		this.wrapError = wrapError;
+	}
+	
 	public void setOneRoundTime(long time){
 		this.oneRound = time;
 	}
@@ -43,11 +56,16 @@ public class Result {
 	}
 	
 	public void print(){
-		System.out.println("RBF method: " + rbf);
-		System.out.println("Train method: " + train);
-		System.out.println("Kohonen: " + isKohonen);
-		System.out.println("Train time: " + trainTime);
-		System.out.println("One round time: " + oneRound);
+		if (rbf != null)
+			System.out.println("RBF method: " + rbf);
+		if (train != null)
+			System.out.println("Train method: " + train);
+		if (rbf != null)
+			System.out.println("Kohonen: " + isKohonen);
+		if (trainTime != 0)
+			System.out.println("Train time: " + trainTime);
+		if (oneRound != 0)
+			System.out.println("One round time: " + oneRound);
 		System.out.println("Correct count: " + correctCount);
 		System.out.println("Acceptable Count: " + acceptableCount);
 		System.out.println("Wrap Error: " + wrapError);

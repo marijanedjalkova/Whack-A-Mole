@@ -2,20 +2,26 @@ import java.util.Random;
 
 public class MoleGame {
 	private final int GAME_LENGTH = 100;
-	int moveCount;
+	int time;
 	Player player;
 	FSM model;
 	int correctCount;
 	int acceptableCount;
 	int correctStateCount;
-	int acceptableError = 2;
+	int acceptableError = 4;
 	int wrapError;
 	Result gameResult;
+	boolean isScripted;
 	
 	
-	public MoleGame(){
-		moveCount = 0;
+	public MoleGame(boolean scripted){
+		this.isScripted = scripted;
+		time = 0;
 		player = new Player();
+		if (this.isScripted)
+			player.inilialiseScriptedNet();
+		else
+			player.initialiseUnscriptedNet();
 		model = new FSM();
 		correctCount = 0;
 		acceptableCount = 0;
@@ -24,8 +30,46 @@ public class MoleGame {
 		
 	}
 	
+	public void startUnscriptedGame(){
+		while(!finished()){
+			int move = getMove();
+			int clue = getUnscriptedClueFromMove(move, model.currentState);
+			State s = model.currentState == null ? model.getState(0) : model.currentState;
+			int[] guess = player.makeUnscriptedGuess(clue, s, move, model.getState(move).getValue());
+			int pos_guess = guess[0];
+			int state_guess = guess[1];
+			model.updateState(move);
+			System.out.println(time + ". Clue: " + clue+ ", mole: " + pos_guess +"(" + move + ")" +  
+					 ", state guess " + state_guess + "(" + model.currentState.value + ")");
+			analyze_guess(pos_guess, state_guess, move, model.currentState.getValue(), clue);
+			time++;
+		}
+		System.out.println("DONE-------------------------------------");
+		gameResult = new Result(correctCount, 
+				GAME_LENGTH, 
+				acceptableCount, 
+				correctStateCount, 
+				wrapError, 
+				50);
+		gameResult.print();
+	}
+	
+	public int h(){
+		return time + 1;
+	}
+	
+	public int getUnscriptedClueFromMove(int move, State currentState){
+		int result = getClueFromMove(move, currentState);
+		result += h();
+		if (result >= 100)
+			return result - 100;
+		if (result < 0)
+			return result + 100;
+		return result;
+	}
+	
 	public void resetGame(){
-		moveCount = 0;
+		time = 0;
 		model = new FSM();
 		correctCount = 0;
 		acceptableCount = 0;
@@ -34,20 +78,9 @@ public class MoleGame {
 		wrapError = 0;
 	}
 	
-	public int getMove(){
-		Random r = new Random();
-		int Low = 1;
-		int High = 100;
-		return r.nextInt(High-Low) + Low;
-	}
-	
-	public boolean finished(){
-		if (moveCount < GAME_LENGTH)
-			return false;
-		return true;
-	}
-	
-	public void startGame(){
+
+
+	public void startScriptedGame(){
 		
 		while(!finished()){
 			int move = getMove();
@@ -57,7 +90,7 @@ public class MoleGame {
 			int state_guess = guess[1];
 			model.updateState(move);
 			analyze_guess(pos_guess, state_guess, move, model.currentState.getValue(), clue);
-			moveCount++;
+			time++;
 		}
 		
 		gameResult = new Result(correctCount, 
@@ -70,17 +103,23 @@ public class MoleGame {
 								player.net.rbf,
 								player.net.trainMethod,
 								player.isKohonen);
-		//print_results();
 		
 	}
 	
-	private void print_results(){
-		System.out.println("Guessed " + correctCount + " out of " + GAME_LENGTH);
-		System.out.println("Acceptable " + acceptableCount + " out of " + GAME_LENGTH);
-		System.out.println("Guessed states: " + correctStateCount + " out of " + GAME_LENGTH);
-		System.out.println("Wrapping error: " + wrapError);
-		
+	public int getMove(){
+		Random r = new Random();
+		int Low = 1;
+		int High = 100;
+		return r.nextInt(High-Low) + Low;
 	}
+	
+	
+	public boolean finished(){
+		if (time < GAME_LENGTH)
+			return false;
+		return true;
+	}
+	
 
 	private int getClueFromMove(int move, State currentState) {
 		int result;

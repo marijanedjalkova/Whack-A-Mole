@@ -18,6 +18,10 @@ public class FSM {
 		currentState =  states.get(move % 2);
 	}
 	
+	public State getState(int move){
+		return states.get(move % 2);
+	}
+	
 
 	
 	
